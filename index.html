@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ur">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gentle Website</title>
+<style>
+body {
+  margin:0; padding:0;
+  font-family:"Georgia", serif;
+  height:100vh; overflow:hidden;
+  display:flex; justify-content:center; align-items:center;
+  background:linear-gradient(135deg,#E6D2B8,#EAD7BF);
+  position:relative;
+}
+
+/* Pages */
+.page {
+  position:absolute; width:100%; height:100%;
+  display:flex; flex-direction:column;
+  justify-content:center; align-items:center;
+  text-align:center; padding:20px;
+  opacity:0; pointer-events:none; transition:0.5s;
+}
+.active { opacity:1; pointer-events:auto; }
+
+/* Rope page */
+.rope { width:10px; height:200px; background:#B5651D; border-radius:5px; margin-bottom:20px; }
+.pull-btn { padding:10px 20px; background:#FF6B6B; color:white; border:none; border-radius:10px; cursor:pointer; }
+
+/* Photo page */
+img.photo {
+  width:224px;       /* match original photo width */
+  height:363px;      /* match original photo height */
+  border-radius:20px; /* slightly rounded corners */
+  object-fit:cover;   /* fit photo nicely */
+  border:3px solid #fff;
+  margin-bottom:15px;
+}
+
+/* Navigation buttons */
+.controls { position:absolute; bottom:20px; display:flex; gap:20px; }
+.controls button { padding:10px 15px; border:none; border-radius:10px; background:#6C5B7B; color:white; cursor:pointer; }
+
+/* Animated hearts and stars */
+.heart, .star { position:absolute; width:10px; height:10px; opacity:0.8; animation:float 5s linear infinite; }
+.heart { background:red; clip-path:polygon(50% 0%, 61% 13%, 75% 15%, 82% 28%, 75% 45%, 50% 75%, 25% 45%, 18% 28%, 25% 15%, 39% 13%); }
+.star { background:yellow; clip-path:polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); }
+@keyframes float { 0% {transform:translateY(0px) translateX(0px);} 50% {transform:translateY(-100px) translateX(20px);} 100% {transform:translateY(0px) translateX(-20px);} }
+</style>
+</head>
+<body>
+
+<!-- Page 1 -->
+<div class="page active" id="page1">
+  <div class="rope"></div>
+  <button class="pull-btn" onclick="nextPage()">Pull</button>
+</div>
+
+<!-- Page 2 -->
+<div class="page" id="page2">
+  <p style="font-size:24px;">یہ لمحہ بھی شاید،<br>کسی نظر کا نتیجہ ہے۔ 🥀</p>
+</div>
+
+<!-- Page 3 -->
+<div class="page" id="page3">
+  <img src="eye.jpg" alt="Photo" class="photo">
+  <p style="font-size:20px;">آنکھیں…<br>جو کہے بنا سب کہہ جائیں۔<br>خاموش، مگر بےحد روشن۔ 🌕</p>
+</div>
+
+<!-- Page 4 -->
+<div class="page" id="page4">
+  <p style="font-size:24px;">بس ایک نرم سا خیال،<br>کہ کچھ لمحے اپنی سادگی میں ہی مکمل ہوتے ہیں۔</p>
+  <p style="margin-top:20px; font-size:20px;">✍️ حمّاد~</p>
+</div>
+
+<!-- Page 5 -->
+<div class="page" id="page5">
+  <p style="font-size:24px; line-height:1.6;">
+    Sometimes the little things matter the most.<br>
+    I hope this brings a smile to your day.<br>
+    Life is simple when we laugh together.<br>
+    You make ordinary moments feel special.<br>
+    Thank you for just being you. 🌸
+  </p>
+</div>
+
+<!-- Navigation buttons -->
+<div class="controls" id="navControls" style="display:none;">
+  <button onclick="prevPage()">⬅️ Back</button>
+  <button onclick="nextPage()">Next ➡️</button>
+</div>
+
+<script>
+let currentPage = 1;
+const totalPages = 5;
+
+function showPage(n){
+  for(let i=1;i<=totalPages;i++){
+    document.getElementById('page'+i).classList.remove('active');
+  }
+  document.getElementById('page'+n).classList.add('active');
+
+  // Show navigation only from page 2
+  document.getElementById('navControls').style.display = n>=2 ? 'flex' : 'none';
+}
+
+function nextPage(){
+  if(currentPage < totalPages){ currentPage++; showPage(currentPage); }
+}
+
+function prevPage(){
+  if(currentPage > 1){ currentPage--; showPage(currentPage); }
+}
+
+// Animated hearts and stars
+for(let i=0;i<30;i++){
+  const heart=document.createElement('div');
+  heart.classList.add('heart');
+  heart.style.left=Math.random()*100+'vw';
+  heart.style.top=Math.random()*100+'vh';
+  heart.style.width=(5+Math.random()*10)+'px';
+  heart.style.height=heart.style.width;
+  heart.style.animationDuration=(3+Math.random()*5)+'s';
+  document.body.appendChild(heart);
+
+  const star=document.createElement('div');
+  star.classList.add('star');
+  star.style.left=Math.random()*100+'vw';
+  star.style.top=Math.random()*100+'vh';
+  star.style.width=(5+Math.random()*5)+'px';
+  star.style.height=star.style.width;
+  star.style.animationDuration=(2+Math.random()*4)+'s';
+  document.body.appendChild(star);
+}
+</script>
+
+</body>
+</html>
