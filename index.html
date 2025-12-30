@@ -27,7 +27,7 @@ body{
   display:flex;
   align-items:center;
   justify-content:center;
-  z-index:10; /* ABOVE EVERYTHING */
+  z-index:10;
   transition:1s;
 }
 
@@ -71,7 +71,7 @@ body{
   opacity:0;
   pointer-events:none;
   transition:.7s;
-  z-index:2; /* above light */
+  z-index:2;
 }
 
 .active{opacity:1;pointer-events:auto;}
@@ -96,7 +96,7 @@ img.photo{
   color:white;
   cursor:pointer;
   display:none;
-  z-index:12; /* above everything */
+  z-index:12;
   backdrop-filter: blur(4px);
 }
 
@@ -172,7 +172,7 @@ function showPage(n){
     nextBtn.style.display='block';
   } else {
     backBtn.style.display='none';
-    nextBtn.style.display='none';
+    nextBtn.style.display='block'; // TAP ke baad bhi next visible
   }
 }
 
@@ -181,13 +181,16 @@ tapBtn.addEventListener("click", ()=>{
   dark.style.opacity=0;
   setTimeout(()=> dark.style.display="none", 900);
   light.classList.add("on");
+  
+  // Next button visible after TAP
+  backBtn.style.display='none';
+  nextBtn.style.display='block';
 });
 
 /* NEXT */
 function nextPage(){
   if(currentPage < totalPages){
     currentPage++;
-    // SONG STARTS WHEN GOING TO PAGE 3
     if(currentPage === 3){
       song.volume = 0.35;
       song.play().catch(()=>{});
