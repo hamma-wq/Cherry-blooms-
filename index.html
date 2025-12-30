@@ -3,27 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Aesthetic Site</title>
+<title>Gentle Website</title>
 
 <style>
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:"Georgia", serif;
-}
+* {margin:0;padding:0;box-sizing:border-box;font-family:"Georgia", serif;}
 
-body{
+body {
   height:100vh;
   overflow:hidden;
-  background:#050505;
-  display:flex;
-  justify-content:center;
-  align-items:center;
+  background: linear-gradient(135deg, #E6D2B8, #EAD7BF);
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-/* pages */
-.page{
+.page {
   position:absolute;
   width:100%;
   height:100%;
@@ -33,186 +28,121 @@ body{
   align-items:center;
   text-align:center;
   padding:20px;
+  transition: opacity 0.8s, transform 0.8s;
   opacity:0;
   pointer-events:none;
+  transform: translateY(50px);
 }
 
-.active{
-  opacity:1;
-  pointer-events:auto;
+.active {opacity:1; pointer-events:auto; transform: translateY(0);}
+
+.rope {width:10px;height:200px;background:#B5651D;border-radius:5px;margin-bottom:20px;}
+
+.pull-btn {
+  padding:10px 20px;background:#FF6B6B;border:none;border-radius:10px;cursor:pointer;font-size:16px;color:white;
 }
 
-/* PAGE 1 — bulb scene */
-.scene{
-  position:relative;
-  width:100%;
-  height:100%;
-  background:#050505;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-}
-
-.tap-btn{
-  padding:10px 24px;
-  border-radius:999px;
-  border:1px solid #333;
-  background:#0c0c0c;
-  color:#eee;
-  font-size:15px;
-}
-
-.bulb-wrap{
-  position:absolute;
-  top:15%;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:10px;
-  opacity:0;
-}
-
-.bulb{
-  width:34px;
-  height:34px;
-  border-radius:50%;
-  background:#1d1d1d;
-  border:1px solid #3a3a3a;
-}
-
-.light{
-  width:210px;
-  height:260px;
-  background: radial-gradient(circle at top, rgba(255,255,210,.3), transparent 75%);
-  opacity:0;
-}
-
-.message{
-  margin-top:10px;
-  color:#dcdcdc;
-  font-size:14px;
-}
-
-/* light ON — still minimal */
-.on .bulb{
-  background:#fff5b0;
-  border:none;
-}
-
-.on .light{
-  opacity:1;
-}
-
-.on.scene{
-  background:#0d0f18;
-}
-
-/* image page */
-img.photo{
+img.photo {
   width:224px;
   height:363px;
   border-radius:12px;
+  margin-bottom:15px;
   object-fit:cover;
   border:3px solid #fff;
-  margin-bottom:15px;
 }
 
-/* nav buttons */
-#backBtn,#nextBtn{
+/* Corner Buttons */
+#backBtn, #nextBtn {
   position:fixed;
   padding:10px 18px;
   border:none;
   border-radius:14px;
-  background:#2a2a2a;
-  color:#fff;
-  font-size:15px;
+  background:#6C5B7B;
+  color:white;
+  font-size:16px;
+  cursor:pointer;
+  z-index:1000;
   display:none;
-  bottom:15px;
 }
 
-#backBtn{left:15px;}
-#nextBtn{right:15px;}
+#backBtn{left:15px; bottom:15px;}
+#nextBtn{right:15px; bottom:15px;}
 </style>
 </head>
 
 <body>
 
-<!-- PAGE 1 -->
+<!-- AUDIO -->
+<audio id="bgSong" src="song.mp3" loop></audio>
+
+<!-- Page 1 -->
 <div class="page active" id="page1">
-  <div class="scene" id="scene">
-    <div class="bulb-wrap" id="bulbWrap">
-      <div class="bulb"></div>
-      <div class="light"></div>
-      <div class="message">the night feels softer now.</div>
-    </div>
-
-    <button class="tap-btn" id="tapBtn">Tap</button>
-  </div>
+  <div class="rope"></div>
+  <button class="pull-btn" onclick="nextPage()">Pull</button>
 </div>
 
-<!-- PAGE 2 -->
+<!-- Page 2 -->
 <div class="page" id="page2">
-  <p style="font-size:24px;">
-    یہ لمحہ بھی شاید،<br>
-    کسی نظر کا نتیجہ ہے۔ 🥀
-  </p>
+  <p style="font-size:24px;">یہ لمحہ بھی شاید،<br>کسی نظر کا نتیجہ ہے۔ 🥀</p>
 </div>
 
-<!-- PAGE 3 -->
+<!-- Page 3 -->
 <div class="page" id="page3">
-  <img src="eye.jpg" class="photo" alt="eye">
-  <p style="font-size:20px;">
-    آنکھیں…<br>
-    جو کہے بنا سب کہہ جائیں۔<br>
-    خاموش، مگر بےحد روشن۔ 🌕
-  </p>
+  <img src="eye.jpg" alt="Photo" class="photo">
+  <p style="font-size:20px;">آنکھیں…<br>جو کہے بنا سب کہہ جائیں۔<br>خاموش، مگر بےحد روشن۔ 🌕</p>
 </div>
 
-<!-- PAGE 4 -->
+<!-- Page 4 -->
 <div class="page" id="page4">
-  <p style="font-size:24px;">
-    بس ایک نرم سا خیال —<br>
-    کچھ لمحے سادگی میں ہی مکمل ہوتے ہیں۔
-  </p>
-  <p style="margin-top:18px;font-size:20px;">✍️ Eren~</p>
+  <p style="font-size:24px;">بس ایک نرم سا خیال،<br>کہ کچھ لمحے اپنی سادگی میں ہی مکمل ہوتے ہیں۔</p>
+  <p style="margin-top:20px; font-size:20px;">✍️ Eren~</p>
 </div>
 
-<!-- PAGE 5 -->
+<!-- Page 5 -->
 <div class="page" id="page5">
-  <p style="font-size:22px; line-height:1.6;">
+  <p style="font-size:24px; line-height:1.6;">
     Sometimes the little things matter the most.<br>
     I hope this brings a smile to your day.<br>
-    Life feels softer when we slow down.<br>
-    Ordinary moments become memories.<br>
-    Thanks for being here. 🌸
+    Life is simple when we laugh together.<br>
+    You make ordinary moments feel special.<br>
+    Thank you for just being you. 🌸
   </p>
 </div>
 
+<!-- Buttons -->
 <button id="backBtn" onclick="prevPage()">⬅️ Back</button>
 <button id="nextBtn" onclick="nextPage()">Next ➡️</button>
 
 <script>
 let currentPage = 1;
 const totalPages = 5;
+const song = document.getElementById("bgSong");
 
 function showPage(n){
   for(let i=1;i<=totalPages;i++){
-    document.getElementById("page"+i).classList.remove("active");
+    document.getElementById('page'+i).classList.remove('active');
   }
-  document.getElementById("page"+n).classList.add("active");
+  document.getElementById('page'+n).classList.add('active');
 
   if(n>=2){
-    backBtn.style.display="block";
-    nextBtn.style.display="block";
+    backBtn.style.display='block';
+    nextBtn.style.display='block';
   } else {
-    backBtn.style.display="none";
-    nextBtn.style.display="none";
+    backBtn.style.display='none';
+    nextBtn.style.display='none';
   }
 }
 
 function nextPage(){
   if(currentPage < totalPages){
     currentPage++;
+
+    // 👉 SONG STARTS when leaving Page 2 (going to Page 3)
+    if(currentPage === 3){
+      song.volume = 0.4;
+      song.play();
+    }
+
     showPage(currentPage);
   }
 }
@@ -223,18 +153,7 @@ function prevPage(){
     showPage(currentPage);
   }
 }
-
-/* bulb logic */
-const tapBtn = document.getElementById("tapBtn");
-const scene = document.getElementById("scene");
-const bulbWrap = document.getElementById("bulbWrap");
-
-tapBtn.addEventListener("click",()=>{
-  scene.classList.add("on");
-  bulbWrap.style.opacity="1";
-  tapBtn.style.display="none";
-});
 </script>
 
 </body>
-</html>
+</html> 
