@@ -8,17 +8,56 @@
 <style>
 * {margin:0;padding:0;box-sizing:border-box;font-family:"Georgia", serif;}
 
-body {
+body{
   height:100vh;
   overflow:hidden;
-  background: linear-gradient(135deg, #E6D2B8, #EAD7BF);
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  background:#050505;
+  color:#e8e8e8;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  position:relative;
 }
 
-.page {
+/* DARK COVER BEFORE TAP */
+.dark-cover{
+  position:absolute;
+  inset:0;
+  background:#020202;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:6;
+  transition:1s;
+}
+
+.tap-btn{
+  padding:12px 26px;
+  border-radius:40px;
+  background:#0f0f0f;
+  border:1px solid #2a2a2a;
+  color:#ededed;
+  letter-spacing:2px;
+  cursor:pointer;
+}
+
+/* STREET LIGHT EFFECT */
+.light{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:radial-gradient(circle at center,
+    rgba(255,232,186,.95) 0%,
+    rgba(255,232,186,.45) 18%,
+    rgba(6,6,6,.96) 60%,
+    #050505 90%);
+  opacity:0;
+  transition:1.1s ease;
+}
+
+.light.on{opacity:1;}
+
+.page{
   position:absolute;
   width:100%;
   height:100%;
@@ -28,21 +67,14 @@ body {
   align-items:center;
   text-align:center;
   padding:20px;
-  transition: opacity 0.8s, transform 0.8s;
   opacity:0;
   pointer-events:none;
-  transform: translateY(50px);
+  transition:.7s;
 }
 
-.active {opacity:1; pointer-events:auto; transform: translateY(0);}
+.active{opacity:1;pointer-events:auto;}
 
-.rope {width:10px;height:200px;background:#B5651D;border-radius:5px;margin-bottom:20px;}
-
-.pull-btn {
-  padding:10px 20px;background:#FF6B6B;border:none;border-radius:10px;cursor:pointer;font-size:16px;color:white;
-}
-
-img.photo {
+img.photo{
   width:224px;
   height:363px;
   border-radius:12px;
@@ -51,22 +83,22 @@ img.photo {
   border:3px solid #fff;
 }
 
-/* Corner Buttons */
-#backBtn, #nextBtn {
+/* NAV */
+#backBtn,#nextBtn{
   position:fixed;
   padding:10px 18px;
   border:none;
   border-radius:14px;
-  background:#6C5B7B;
+  background:#0f0f0f;
+  border:1px solid #262626;
   color:white;
-  font-size:16px;
   cursor:pointer;
-  z-index:1000;
   display:none;
+  z-index:5;
 }
 
-#backBtn{left:15px; bottom:15px;}
-#nextBtn{right:15px; bottom:15px;}
+#backBtn{left:15px;bottom:15px;}
+#nextBtn{right:15px;bottom:15px;}
 </style>
 </head>
 
@@ -75,30 +107,34 @@ img.photo {
 <!-- AUDIO -->
 <audio id="bgSong" src="song.mp3" loop></audio>
 
-<!-- Page 1 -->
-<div class="page active" id="page1">
-  <div class="rope"></div>
-  <button class="pull-btn" onclick="nextPage()">Pull</button>
+<!-- DARK COVER -->
+<div class="dark-cover" id="dark">
+  <button class="tap-btn" id="tapBtn">TAP</button>
 </div>
 
-<!-- Page 2 -->
+<!-- LIGHT -->
+<div class="light" id="light"></div>
+
+<!-- PAGES (TEXT SAME HI RAKHA HAI) -->
+
+<div class="page active" id="page1">
+  <h2 style="font-size:22px;">Soft… calm… just vibes ✨</h2>
+</div>
+
 <div class="page" id="page2">
   <p style="font-size:24px;">یہ لمحہ بھی شاید،<br>کسی نظر کا نتیجہ ہے۔ 🥀</p>
 </div>
 
-<!-- Page 3 -->
 <div class="page" id="page3">
   <img src="eye.jpg" alt="Photo" class="photo">
   <p style="font-size:20px;">آنکھیں…<br>جو کہے بنا سب کہہ جائیں۔<br>خاموش، مگر بےحد روشن۔ 🌕</p>
 </div>
 
-<!-- Page 4 -->
 <div class="page" id="page4">
   <p style="font-size:24px;">بس ایک نرم سا خیال،<br>کہ کچھ لمحے اپنی سادگی میں ہی مکمل ہوتے ہیں۔</p>
   <p style="margin-top:20px; font-size:20px;">✍️ Eren~</p>
 </div>
 
-<!-- Page 5 -->
 <div class="page" id="page5">
   <p style="font-size:24px; line-height:1.6;">
     Sometimes the little things matter the most.<br>
@@ -109,11 +145,14 @@ img.photo {
   </p>
 </div>
 
-<!-- Buttons -->
 <button id="backBtn" onclick="prevPage()">⬅️ Back</button>
 <button id="nextBtn" onclick="nextPage()">Next ➡️</button>
 
 <script>
+const dark = document.getElementById("dark");
+const tapBtn = document.getElementById("tapBtn");
+const light = document.getElementById("light");
+
 let currentPage = 1;
 const totalPages = 5;
 const song = document.getElementById("bgSong");
@@ -133,20 +172,29 @@ function showPage(n){
   }
 }
 
+/* TAP -> LIGHT ON */
+tapBtn.addEventListener("click", ()=>{
+  dark.style.opacity=0;
+  setTimeout(()=> dark.style.display="none", 900);
+  light.classList.add("on");
+});
+
+/* NEXT */
 function nextPage(){
   if(currentPage < totalPages){
     currentPage++;
 
-    // 👉 SONG STARTS when leaving Page 2 (going to Page 3)
+    // SONG STARTS WHEN GOING TO PAGE 3
     if(currentPage === 3){
-      song.volume = 0.4;
-      song.play();
+      song.volume = 0.35;
+      song.play().catch(()=>{});
     }
 
     showPage(currentPage);
   }
 }
 
+/* BACK */
 function prevPage(){
   if(currentPage > 1){
     currentPage--;
